@@ -9,6 +9,20 @@ type CreateVendorStepInput = {
     name: string
     handle?: string
     logo?: string
+    description?: string
+    category?: string
+    instagram?: string
+    twitter?: string
+    facebook?: string
+    website?: string
+    contact_email?: string
+    contact_phone?: string
+    address?: string
+    city?: string
+    country?: string
+    return_policy?: string
+    shipping_policy?: string
+    privacy_policy?: string
 }
 
 const createVendorStep = createStep(

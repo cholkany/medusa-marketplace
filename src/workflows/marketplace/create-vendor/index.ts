@@ -14,6 +14,20 @@ export type CreateVendorWorkflowInput = {
     name: string
     handle?: string
     logo?: string
+    description?: string
+    category?: string
+    instagram?: string
+    twitter?: string
+    facebook?: string
+    website?: string
+    contact_email?: string
+    contact_phone?: string
+    address?: string
+    city?: string
+    country?: string
+    return_policy?: string
+    shipping_policy?: string
+    privacy_policy?: string
     admin: {
         email: string
         first_name?: string
@@ -29,6 +43,20 @@ const createVendorWorkflow = createWorkflow(
             name: input.name,
             handle: input.handle,
             logo: input.logo,
+            description: input.description,
+            category: input.category,
+            instagram: input.instagram,
+            twitter: input.twitter,
+            facebook: input.facebook,
+            website: input.website,
+            contact_email: input.contact_email,
+            contact_phone: input.contact_phone,
+            address: input.address,
+            city: input.city,
+            country: input.country,
+            return_policy: input.return_policy,
+            shipping_policy: input.shipping_policy,
+            privacy_policy: input.privacy_policy,
         })
 
         const vendorAdminData = transform({
@@ -53,7 +81,15 @@ const createVendorWorkflow = createWorkflow(
         // @ts-ignore
         const { data: vendorWithAdmin } = useQueryGraphStep({
             entity: "vendor",
-            fields: ["id", "name", "handle", "logo", "admins.*"],
+            fields: [
+                "id", "name", "handle", "logo",
+                "description", "category",
+                "instagram", "twitter", "facebook", "website",
+                "contact_email", "contact_phone",
+                "address", "city", "country",
+                "return_policy", "shipping_policy", "privacy_policy",
+                "admins.*",
+            ],
             filters: {
                 id: vendor.id,
             },

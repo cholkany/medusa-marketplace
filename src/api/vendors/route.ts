@@ -12,12 +12,30 @@ export const PostVendorCreateSchema = z.object({
     name: z.string(),
     handle: z.string().optional(),
     logo: z.string().optional(),
+    // Shop profile fields (flattened from storefront "metadata")
+    description: z.string().optional(),
+    category: z.string().optional(),
+    // Social links
+    instagram: z.string().optional(),
+    twitter: z.string().optional(),
+    facebook: z.string().optional(),
+    website: z.string().optional(),
+    // Contact info
+    contact_email: z.string().optional(),
+    contact_phone: z.string().optional(),
+    address: z.string().optional(),
+    city: z.string().optional(),
+    country: z.string().optional(),
+    // Policies
+    return_policy: z.string().optional(),
+    shipping_policy: z.string().optional(),
+    privacy_policy: z.string().optional(),
     admin: z.object({
         email: z.string(),
         first_name: z.string().optional(),
         last_name: z.string().optional(),
-    }).strict(),
-}).strict()
+    }),
+})
 
 type RequestBody = z.infer<typeof PostVendorCreateSchema>
 
@@ -34,13 +52,49 @@ export const POST = async (
         )
     }
 
-    const vendorData = req.validatedBody
+    const {
+        name,
+        handle,
+        logo,
+        description,
+        category,
+        instagram,
+        twitter,
+        facebook,
+        website,
+        contact_email,
+        contact_phone,
+        address,
+        city,
+        country,
+        return_policy,
+        shipping_policy,
+        privacy_policy,
+        admin,
+    } = req.validatedBody
 
     // create vendor admin
     const { result } = await createVendorWorkflow(req.scope)
         .run({
             input: {
-                ...vendorData,
+                name,
+                handle,
+                logo,
+                description,
+                category,
+                instagram,
+                twitter,
+                facebook,
+                website,
+                contact_email,
+                contact_phone,
+                address,
+                city,
+                country,
+                return_policy,
+                shipping_policy,
+                privacy_policy,
+                admin,
                 authIdentityId: req.auth_context.auth_identity_id,
             } as CreateVendorWorkflowInput,
         })
