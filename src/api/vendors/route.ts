@@ -1,12 +1,45 @@
 import {
     AuthenticatedMedusaRequest,
+    MedusaRequest,
     MedusaResponse,
 } from "@medusajs/framework/http"
-import { MedusaError } from "@medusajs/framework/utils"
+import { MedusaError, ContainerRegistrationKeys } from "@medusajs/framework/utils"
 import { z } from "@medusajs/framework/zod"
 import createVendorWorkflow, {
     CreateVendorWorkflowInput,
 } from "../../workflows/marketplace/create-vendor"
+
+const VENDOR_FIELDS = [
+    "id", "name", "handle", "logo",
+    "description", "category",
+    "instagram", "twitter", "facebook", "website",
+    "contact_email", "contact_phone",
+    "address", "city", "country",
+    "return_policy", "shipping_policy", "privacy_policy",
+    "created_at",
+]
+
+// ── GET /vendors ──────────────────────────────────────────────────────────────
+// Public listing of all vendor shops. Supports ?handle=<handle> for single lookup.
+export const GET = async (
+    req: MedusaRequest,
+    res: MedusaResponse
+) => {
+    const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
+
+    const filters: Record<string, any> = {}
+    if (req.query?.handle) {
+        filters.handle = req.query.handle as string
+    }
+
+    const { data: vendors } = await query.graph({
+        entity: "vendor",
+        fields: VENDOR_FIELDS,
+        filters: Object.keys(filters).length > 0 ? filters : undefined,
+    })
+
+    res.json({ vendors })
+}
 
 export const PostVendorCreateSchema = z.object({
     name: z.string(),
